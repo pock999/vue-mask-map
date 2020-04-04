@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="col-md-8 map-container">
-          <MapView/>
+          <MapView :mask-data = "apiData"/>
         </div>
       </div>
     </div>
@@ -91,14 +91,19 @@ export default {
   data() {
     return {
       apiURL: 'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json',
+      apiData: [],
     };
   },
   methods: {
     loadingAPI() {
       this.$http.get(this.apiURL).then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
+        this.apiData = response.data.features;
       });
     },
+  },
+  beforeMount() {
+    this.loadingAPI();
   },
 };
 </script>
