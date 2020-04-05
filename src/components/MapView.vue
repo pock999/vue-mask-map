@@ -4,6 +4,18 @@
 
 <script>
 import L from 'leaflet';
+import 'leaflet.markercluster';
+
+let map;
+const markerLayer = L.markerClusterGroup();
+const greenIcon = new L.Icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 export default {
   name: 'MapView',
@@ -11,6 +23,7 @@ export default {
   data() {
     return {
       centerCoord: [],
+      parseData: [],
     };
   },
   methods: {
@@ -23,7 +36,7 @@ export default {
     },
     showPosition(position) {
     //   const latlon = `${position.coords.latitude},${position.coords.longitude}`;
-      const map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 10);
+      map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 10);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
       }).addTo(map);
@@ -31,22 +44,35 @@ export default {
     },
     showError() {
       this.centerCoord = [25.035915, 121.563619];
-      const map = L.map('map').setView([25.035915, 121.563619], 10);
+      map = L.map('map').setView([25.035915, 121.563619], 10);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
       }).addTo(map);
     },
-    displayMap() {},
+    importDate() {
+      this.maskData.forEach((element) => {
+        this.parseData.push(JSON.parse(JSON.stringify(element)));
+      });
+      this.parseData.forEach((ele) => {
+        const thisLocat = ele.geometry.coordinates;
+        markerLayer.addLayer(L.marker([thisLocat[1], thisLocat[0]], { icon: greenIcon }));
+      });
+      map.addLayer(markerLayer);
+    },
   },
   beforeMount() {
     this.getLocation();
     if (typeof this.maskData[0] !== 'undefined') {
       //    若有資料，就放入地圖
+      this.importDate();
     }
   },
   watch: {
-    maskData() {
+    maskData(newVal) {
       // 資料更新，放入地圖
+      if (typeof newVal[0] !== 'undefined') {
+        this.importDate();
+      }
     },
   },
 };
@@ -55,8 +81,18 @@ export default {
 <style>
   @import '../../node_modules/bootstrap/dist/css/bootstrap.css';
   @import '../../node_modules/leaflet/dist/leaflet.css';
+  @import '../../node_modules/leaflet.markercluster/dist/MarkerCluster.css';
+
   #map {
    height: 100%;
    width: 100%;
+  }
+  .marker-cluster{
+    background-color: #26ff7980;
+    border-radius:50%;
+  }
+  .marker-cluster div{
+    text-align: center;
+    line-height:40px;
   }
 </style>

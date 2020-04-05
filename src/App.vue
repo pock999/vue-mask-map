@@ -111,6 +111,8 @@ export default {
 <style>
   @import '../node_modules/bootstrap/dist/css/bootstrap.css';
   @import '../node_modules/leaflet/dist/leaflet.css';
+  @import '../node_modules/leaflet.markercluster/dist/MarkerCluster.css';
+
   #app{
     margin-top: 20px;
   }
