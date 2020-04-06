@@ -8,14 +8,32 @@ import 'leaflet.markercluster';
 
 let map;
 const markerLayer = L.markerClusterGroup();
-const greenIcon = new L.Icon({
-  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+// const redIcon = new L.Icon({
+//   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+//   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+//   shadowSize: [41, 41],
+// });
+
+const blueIcon = new L.Icon({
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
 });
+
+// const greyIcon = new L.Icon({
+//   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+//   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+//   shadowSize: [41, 41]
+// });
 
 export default {
   name: 'MapView',
@@ -24,9 +42,13 @@ export default {
     return {
       centerCoord: [],
       parseData: [],
+      showData: [],
     };
   },
   methods: {
+    updateListData() {
+      this.$emit('updateShowList', this.showData);
+    },
     getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition, this.showError);
@@ -43,8 +65,8 @@ export default {
       this.centerCoord = [position.coords.latitude, position.coords.longitude];
     },
     showError() {
-      this.centerCoord = [25.035915, 121.563619];
-      map = L.map('map').setView([25.035915, 121.563619], 10);
+      this.centerCoord = [23.635915, 121.063619];
+      map = L.map('map').setView([23.635915, 121.063619], 7);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
       }).addTo(map);
@@ -55,9 +77,11 @@ export default {
       });
       this.parseData.forEach((ele) => {
         const thisLocat = ele.geometry.coordinates;
-        markerLayer.addLayer(L.marker([thisLocat[1], thisLocat[0]], { icon: greenIcon }));
+        markerLayer.addLayer(L.marker([thisLocat[1], thisLocat[0]], { icon: blueIcon }));
       });
       map.addLayer(markerLayer);
+      this.showData = this.parseData;
+      this.updateListData();
     },
   },
   beforeMount() {

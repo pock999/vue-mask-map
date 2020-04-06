@@ -12,67 +12,27 @@
             </select>
           </div>
           <div class="list-group d-none d-md-block">
-            <a href="#" class="list-group-item list-group-item-action flex-column
-            align-items-start">
+            <a class="list-group-item list-group-item-action flex-column
+            align-items-start" v-for="(item, index) in showList" :key="index">
               <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">藥局名稱</h5>
-                <small>行政區 村里</small>
+                <h5 class="mb-1">{{ item.properties.name }}</h5>
+                <small>{{ item.properties.town }} {{ item.properties.cunli }}</small>
               </div>
-              <p class="mb-1">地址</p>
-              <p class="mb-1">看診時間</p>
+              <p class="mb-1">{{ item.properties.address }}</p>
+              <p class="mb-1">資料更新時間:{{ item.properties.updated }}</p>
               <ul style="padding-left:0;">
-                <li style="list-style-type:none; text-align:left;">大人口罩:</li>
-                <li style="list-style-type:none; text-align:left;">小孩口罩:</li>
+                <li style="list-style-type:none; text-align:left;">大人口罩:
+                  {{ item.properties.mask_adult }}</li>
+                <li style="list-style-type:none; text-align:left;">小孩口罩:
+                  {{ item.properties.mask_child }}</li>
               </ul>
-              <small>電話</small>
+              <small>{{ item.properties.phone }}</small>
             </a>
             <!--  -->
-            <a href="#" class="list-group-item list-group-item-action flex-column
-            align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">藥局名稱</h5>
-                <small>行政區 村里</small>
-              </div>
-              <p class="mb-1">地址</p>
-              <p class="mb-1">看診時間</p>
-              <ul style="padding-left:0;">
-                <li style="list-style-type:none; text-align:left;">大人口罩:</li>
-                <li style="list-style-type:none; text-align:left;">小孩口罩:</li>
-              </ul>
-              <small>電話</small>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action flex-column
-            align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">藥局名稱</h5>
-                <small>行政區 村里</small>
-              </div>
-              <p class="mb-1">地址</p>
-              <p class="mb-1">看診時間</p>
-              <ul style="padding-left:0;">
-                <li style="list-style-type:none; text-align:left;">大人口罩:</li>
-                <li style="list-style-type:none; text-align:left;">小孩口罩:</li>
-              </ul>
-              <small>電話</small>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action flex-column
-            align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">藥局名稱</h5>
-                <small>行政區 村里</small>
-              </div>
-              <p class="mb-1">地址</p>
-              <p class="mb-1">看診時間</p>
-              <ul style="padding-left:0;">
-                <li style="list-style-type:none; text-align:left;">大人口罩:</li>
-                <li style="list-style-type:none; text-align:left;">小孩口罩:</li>
-              </ul>
-              <small>電話</small>
-            </a>
           </div>
         </div>
         <div class="col-md-8 map-container">
-          <MapView :mask-data = "apiData"/>
+          <MapView :mask-data = "apiData" @updateShowList="updateShowList"/>
         </div>
       </div>
     </div>
@@ -92,6 +52,7 @@ export default {
     return {
       apiURL: 'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json',
       apiData: [],
+      showList: [],
     };
   },
   methods: {
@@ -100,6 +61,9 @@ export default {
         // console.log(response.data);
         this.apiData = response.data.features;
       });
+    },
+    updateShowList(showData) {
+      this.showList = showData;
     },
   },
   beforeMount() {
