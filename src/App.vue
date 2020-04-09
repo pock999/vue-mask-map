@@ -112,7 +112,7 @@ export default {
         }, 2000);
       }).catch((e) => {
         console.log(e);
-        alert('不好意思ajax出了問題!!');
+        alert('不好意思ajax出了問題!!!');
       });
     },
     updateShowList(showData) {
