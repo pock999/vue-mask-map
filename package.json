@@ -14,7 +14,8 @@
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
     "vue": "^2.6.11",
-    "vue-axios": "^2.1.5"
+    "vue-axios": "^2.1.5",
+    "vue-loading-overlay": "^3.3.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
