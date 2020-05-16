@@ -103,7 +103,7 @@ export default {
           thisMarker = L.marker([thisLocat[1], thisLocat[0]], { icon: blueIcon });
         }
         /* 給予圖標點擊後跑出的小視窗要顯示的內容 */
-        thisMarker.bindPopup(`<h2>${ele.properties.name}</h2><h4>大人口罩:${ele.properties.mask_adult}</h4><h4>小孩口罩${ele.properties.mask_child}</h4>`).openPopup();
+        thisMarker.bindPopup(`<h2><a href='https://www.google.com.tw/maps/dir//${ele.properties.address}'>${ele.properties.name}</a></h2><h4>大人口罩:${ele.properties.mask_adult}</h4><h4>小孩口罩${ele.properties.mask_child}</h4>`).openPopup();
         markerLayer.addLayer(thisMarker);
       });
       map.addLayer(markerLayer);

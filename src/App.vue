@@ -32,7 +32,11 @@
                 <h5 class="mb-1">{{ item.properties.name }}</h5>
                 <small>{{ item.properties.town }} {{ item.properties.cunli }}</small>
               </div>
-              <p class="mb-1">{{ item.properties.address }}</p>
+              <p class="mb-1">
+                <a :href="'https://www.google.com.tw/maps/dir//' + item.properties.address">
+                  {{ item.properties.address }}
+                </a>
+              </p>
               <p class="mb-1">資料更新時間:{{ item.properties.updated }}</p>
               <ul style="padding-left:0;">
                 <li style="list-style-type:none; text-align:left;">大人口罩:
