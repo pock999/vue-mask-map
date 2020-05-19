@@ -68,23 +68,37 @@ export default {
     },
     /* 若使用者同意定位，則初始化地圖，並將地圖focus至使用者的位置 */
     showPosition(position) {
-    //   const latlon = `${position.coords.latitude},${position.coords.longitude}`;
-      map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 10);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
-      }).addTo(map);
-      this.centerCoord = [position.coords.latitude, position.coords.longitude];
+      return new Promise((resolve) => {
+        map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
+        }).addTo(map);
+        this.centerCoord = [position.coords.latitude, position.coords.longitude];
+        resolve('OK');
+      }).then((message) => {
+        console.log(message);
+        this.importData();
+        this.initData();
+      });
     },
     /* 若使用者不同意定位，則初始化地圖，並將地圖focus至預設定義的位置 */
     showError() {
-      this.centerCoord = [23.635915, 121.063619];
-      map = L.map('map').setView([23.635915, 120.863619], 10);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
-      }).addTo(map);
+      return new Promise((resolve) => {
+        this.centerCoord = [23.635915, 121.063619];
+        map = L.map('map').setView([23.635915, 120.863619], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
+        }).addTo(map);
+        resolve('not OK');
+      }).then((message) => {
+        console.log(message);
+        this.importData();
+        this.initData();
+      });
     },
     /* 將資料放入地圖 */
     importData() {
+      console.log('import data');
       /* 將api傳入資料變成js可用的形式 */
       this.maskData.forEach((element) => {
         this.parseData.push(JSON.parse(JSON.stringify(element)));
@@ -117,12 +131,13 @@ export default {
     },
   },
   beforeMount() {
-    this.getLocation();
-    if (typeof this.maskData[0] !== 'undefined') {
-      //    若有資料，就放入地圖，並更新初始資料
+    return new Promise((resolve) => {
+      this.getLocation();
+      resolve();
+    }).then(() => {
       this.importData();
       this.initData();
-    }
+    });
   },
   watch: {
     // 當api資料更新，放入地圖，並更新初始資料
